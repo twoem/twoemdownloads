@@ -1,7 +1,7 @@
 // Admin JavaScript
 document.addEventListener('DOMContentLoaded', function() {
     // Check if user is already logged in
-    if (localStorage.getItem('adminLoggedIn') === 'true' && window.location.pathname.includes('login.html')) {
+    if (sessionStorage.getItem('adminLoggedIn') === 'true' && window.location.pathname.includes('login.html')) {
         window.location.href = 'dashboard.html';
     }
     
@@ -13,18 +13,19 @@ document.addEventListener('DOMContentLoaded', function() {
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const username = document.getElementById('username').value;
+            const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             
             // Check credentials
             if (username === 'twoem' && password === 'Twoemweb@2020') {
                 // Successful login
-                localStorage.setItem('adminLoggedIn', 'true');
-                localStorage.setItem('lastLogin', new Date().toLocaleString());
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                sessionStorage.setItem('lastLogin', new Date().toLocaleString());
                 window.location.href = 'dashboard.html';
             } else {
                 // Failed login
                 errorMessage.textContent = 'Invalid username or password';
+                errorMessage.style.display = 'block';
             }
         });
     }
@@ -33,14 +34,14 @@ document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('logout-btn')) {
         document.getElementById('logout-btn').addEventListener('click', function(e) {
             e.preventDefault();
-            localStorage.removeItem('adminLoggedIn');
+            sessionStorage.removeItem('adminLoggedIn');
             window.location.href = 'login.html';
         });
     }
     
     // Display last login time
     if (document.getElementById('login-time')) {
-        const lastLogin = localStorage.getItem('lastLogin') || 'First login';
+        const lastLogin = sessionStorage.getItem('lastLogin') || 'First login';
         document.getElementById('login-time').textContent = lastLogin;
     }
     
