@@ -3,31 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TWOEM | LOGIN</title>
+    <title>TWOEM | DASHBOARD</title>
+    <script>
+        // Check login status before showing dashboard
+        if (!sessionStorage.getItem('adminLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/admin.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="admin-login-container">
-        <div class="admin-login-box">
-            <div class="login-header">
-                <h2>TWOEM ADMIN LOGIN</h2>
-                <img src="https://via.placeholder.com/100" alt="Admin Logo" class="admin-logo">
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <h3>TWOEM DASHBOARD</h3>
+                <p>Welcome, Admin</p>
             </div>
-            <form id="admin-login-form">
-                <div class="form-group">
-                    <label for="username"><i class="fas fa-user"></i> Username</label>
-                    <input type="text" id="username" name="username" required>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#" id="upload-public"><i class="fas fa-file-upload"></i> Upload Public Doc</a></li>
+                    <li><a href="#" id="upload-eulogy"><i class="fas fa-file-upload"></i> Upload Eulogy</a></li>
+                    <li><a href="../downloads.html"><i class="fas fa-file-download"></i> View Downloads</a></li>
+                    <li><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-header">
+                <h2>Admin Dashboard</h2>
+                <div class="admin-actions">
+                    <span id="last-login">Last login: <span id="login-time"></span></span>
                 </div>
-                <div class="form-group">
-                    <label for="password"><i class="fas fa-lock"></i> Password</label>
-                    <input type="password" id="password" name="password" required>
+            </header>
+
+            <div class="admin-content">
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <h3>Public Documents</h3>
+                        <p id="public-docs-count">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Eulogies</h3>
+                        <p id="eulogies-count">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Downloads</h3>
+                        <p id="total-downloads">0</p>
+                    </div>
                 </div>
-                <button type="submit" class="btn">Login</button>
-            </form>
-            <div id="login-error" class="error-message"></div>
+
+                <div class="upload-section" id="upload-section" style="display:none;">
+                    <h3 id="upload-title">Upload Document</h3>
+                    <form id="upload-form">
+                        <input type="hidden" id="document-type">
+                        <div class="form-group">
+                            <label for="document-name">Document Name</label>
+                            <input type="text" id="document-name" required>
+                        </div>
+                        <div class="form-group" id="deceased-name-group" style="display:none;">
+                            <label for="deceased-name">Deceased Name</label>
+                            <input type="text" id="deceased-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="document-file">Select File (PDF only)</label>
+                            <input type="file" id="document-file" accept=".pdf" required>
+                        </div>
+                        <button type="submit" class="btn">Upload</button>
+                    </form>
+                </div>
+
+                <div class="documents-list">
+                    <h3>Recent Uploads</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-uploads">
+                            <!-- Recent uploads will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to delete this document?</p>
+            <div class="modal-actions">
+                <button id="confirm-delete" class="btn btn-danger">Delete</button>
+                <button id="cancel-delete" class="btn btn-secondary">Cancel</button>
+            </div>
         </div>
     </div>
 
